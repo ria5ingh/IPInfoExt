@@ -1,0 +1,11 @@
+{
+  "manifest_version": 3,
+  "name": "IP Inspector",
+  "version": "1.0",
+  "description": "View IP info using Shodan InternetDB and GeoNet APIs",
+  "permissions": ["activeTab", "scripting"],
+  "action": {
+    "default_popup": "index.html"
+  },
+  "host_permissions": ["<all_urls>"]
+}

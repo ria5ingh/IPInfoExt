@@ -1,0 +1,10 @@
+body {
+  font-family: Arial, sans-serif;
+  padding: 10px;
+  width: 300px;
+}
+
+#output {
+  font-size: 14px;
+  white-space: pre-wrap;
+}
