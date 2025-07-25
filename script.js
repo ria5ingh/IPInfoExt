@@ -32,7 +32,7 @@ chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
 
         Open Ports: ${shodan.ports?.join(", ") || "None"}
         Tags: ${shodan.tags?.join(", ") || "None"}
-        Hostnames: ${shodan.hostnames?.join(", ") || "None"}
+        
         `;
 
         if (geo.loc) {
