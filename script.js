@@ -25,9 +25,11 @@ chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
             22: 8,
             23: 10,
             25: 5,
+            53: 5,
             69: 6,
             110: 4,
             135: 6,
+            137: 6,
             139: 6,
             143: 4,
             445: 8,
@@ -51,35 +53,71 @@ chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
         let riskScore = 0;
         let maxScore = 0;
 
-        // Ports HTML & score
-        const portsHTML = (shodan.ports || []).map(port => {
-            if (harmfulPorts[port]) {
-                riskScore += harmfulPorts[port];
-                maxScore += harmfulPorts[port];
-                return `<span style="color:red;">${port}</span>`;
-            } else {
-                return `${port}`;
-            }
-        }).join(", ");
+        // Process Ports using traditional loop
+        const ports = shodan.ports || [];
+        let portsHTML = "";
+        for (let i = 0; i < ports.length; i++) {
+            const port = ports[i];
+            const risk = harmfulPorts[port] || 0;
+            const totalScore = 1 + risk;
 
-        // Tags HTML & score
-        const tagsHTML = (shodan.tags || []).map(tag => {
+            riskScore += risk;
+            maxScore += totalScore;
+
+            if (risk > 0) {
+                portsHTML += `<span style="color:red;">${port}</span>`;
+            } else {
+                portsHTML += `${port}`;
+            }
+
+            if (i < ports.length - 1) {
+                portsHTML += ", ";
+            }
+        }
+
+        // Process Tags using traditional loop
+        const tags = shodan.tags || [];
+        let tagsHTML = "";
+        for (let i = 0; i < tags.length; i++) {
+            const tag = tags[i];
             const key = tag.toLowerCase();
-            if (harmfulTags[key]) {
-                riskScore += harmfulTags[key];
-                maxScore += harmfulTags[key];
-                return `<span style="color:red;">${tag}</span>`;
-            } else {
-                return `${tag}`;
-            }
-        }).join(", ");
+            const risk = harmfulTags[key] || 0;
+            const totalScore = 1 + risk;
 
-        // Risk Percentage & Level
-        const riskPercent = maxScore > 0 ? Math.min(100, Math.round((riskScore / maxScore) * 100)) : 0;
+
+            riskScore += risk;
+            maxScore += totalScore;
+
+
+            if (risk > 0) {
+                tagsHTML += `<span style="color:red;">${tag}</span>`;
+            } else {
+                tagsHTML += `${tag}`;
+            }
+
+            if (i < tags.length - 1) {
+                tagsHTML += ", ";
+            }
+        }
+
+        // Risk Percentage and Level
+        let riskPercent = 0;
         let riskLevel = "Low";
-        if (riskPercent >= 75) riskLevel = "Critical";
-        else if (riskPercent >= 50) riskLevel = "High";
-        else if (riskPercent >= 25) riskLevel = "Medium";
+        let riskColor = "green";
+
+        riskPercent = Math.round((riskScore / maxScore) * 100);
+
+        if (riskPercent >= 75) {
+            riskLevel = "Critical";
+            riskColor = "red";
+        } else if (riskPercent >= 50) {
+            riskLevel = "High";
+            riskColor = "orange";
+        } else if (riskPercent >= 25) {
+            riskLevel = "Medium";
+            riskColor = "goldenrod";
+        }
+        
 
         // === Output ===
         output.innerHTML = `
