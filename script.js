@@ -19,70 +19,28 @@ chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
         const shodanRes = await fetch(`https://internetdb.shodan.io/${ip}`);
         const shodan = await shodanRes.json();
 
-        // === Risk Scoring ===
+        // === Updated Risk Scores ===
         const harmfulPorts = {
-                20: 5,
-                21: 5,
-                22: 10,
-                23: 10,
-                25: 5,
-                53: 5,
-                69: 5,
-                110: 5,
-                111: 5,
-                135: 5,
-                137: 5,
-                138: 5,
-                139: 5,
-                143: 5,
-                161: 5,
-                389: 5,
-                445: 10,
-                512: 10,
-                514: 10,
-                873: 5,
-                1433: 10,
-                1521: 10,
-                2049: 10,
-                3306: 5,
-                3389: 15,
-                5000: 15,
-                5432: 10,
-                5900: 15,
-                5902: 15,
-                6379: 10,
-                27018: 10,
-                27017: 10
-            };
-                
-
+            21: 7, 22: 6, 23: 10, 25: 4, 69: 8,
+            110: 4, 135: 6, 139: 6, 143: 3, 445: 10,
+            1433: 9, 3306: 6, 3389: 15, 5900: 12
+        };
 
         const harmfulTags = {
-            malware: 20,
-            vpn: 5,
-            proxy: 5,
-            tor: 15,
-            botnet: 25,
-            exploit: 20,
-            anonymous: 10,
-            blacklist: 20
+            malware: 25, botnet: 25, exploit: 20, tor: 15,
+            proxy: 10, vpn: 8, blacklist: 20, anonymous: 8
         };
 
         let riskScore = 0;
-        let maxScore = 0;
 
-        // Process Ports using traditional loop
+        // Ports
         const ports = shodan.ports || [];
         let portsHTML = "";
         for (let i = 0; i < ports.length; i++) {
             const port = ports[i];
             const risk = harmfulPorts[port] || 0;
-            const totalScore = 1 + risk;
-
-            riskScore += risk;
-            maxScore += totalScore;
-
             if (risk > 0) {
+                riskScore += risk;
                 portsHTML += `<span style="color:red;">${port}</span>`;
             } else {
                 portsHTML += `${port}`;
@@ -93,21 +51,14 @@ chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
             }
         }
 
-        // Process Tags using traditional loop
+        // Tags
         const tags = shodan.tags || [];
         let tagsHTML = "";
         for (let i = 0; i < tags.length; i++) {
-            const tag = tags[i];
-            const key = tag.toLowerCase();
-            const risk = harmfulTags[key] || 0;
-            const totalScore = 1 + risk;
-
-
-            riskScore += risk;
-            maxScore += totalScore;
-
-
+            const tag = tags[i].toLowerCase();
+            const risk = harmfulTags[tag] || 0;
             if (risk > 0) {
+                riskScore += risk;
                 tagsHTML += `<span style="color:red;">${tag}</span>`;
             } else {
                 tagsHTML += `${tag}`;
@@ -118,26 +69,25 @@ chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
             }
         }
 
-        // Risk Percentage and Level
-        let riskPercent = 0;
-        let riskLevel = "Low";
+        // Risk Level
+        let riskLevel = "Safe";
         let riskColor = "green";
 
-        riskPercent = Math.round((riskScore / maxScore) * 100);
-
-        if (riskPercent >= 75) {
+        if (riskScore >= 51) {
             riskLevel = "Critical";
             riskColor = "red";
-        } else if (riskPercent >= 50) {
+        } else if (riskScore >= 26) {
             riskLevel = "High";
             riskColor = "orange";
-        } else if (riskPercent >= 25) {
+        } else if (riskScore >= 11) {
             riskLevel = "Medium";
             riskColor = "goldenrod";
+        } else if (riskScore >= 1) {
+            riskLevel = "Low";
+            riskColor = "blue";
         }
-        
 
-        // === Output ===
+        // Output
         output.innerHTML = `
             <strong>Domain:</strong> ${domain}<br>
             <strong>IP:</strong> ${ip}<br><br>
@@ -151,11 +101,11 @@ chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
             <strong>Open Ports:</strong> ${portsHTML || "None"}<br>
             <strong>Tags:</strong> ${tagsHTML || "None"}<br><br>
 
-            <strong>Risk Level:</strong> <span style="color:${riskPercent >= 75 ? 'red' : riskPercent >= 50 ? 'orange' : riskPercent >= 25 ? 'goldenrod' : 'green'};">${riskLevel}</span><br>
-            <strong>Risk Score:</strong> ${riskScore}/${maxScore} (${riskPercent}%)
+            <strong>Risk Level:</strong> <span style="color:${riskColor};">${riskLevel}</span><br>
+            <strong>Risk Score:</strong> ${riskScore}
         `;
 
-        // Map
+        // Map link
         if (geo.loc) {
             const mapLink = document.getElementById("mapLink");
             mapLink.href = `https://www.google.com/maps?q=${geo.loc}`;
