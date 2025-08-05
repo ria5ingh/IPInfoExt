@@ -63,7 +63,7 @@ chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
             3306: "..", 
             3389: "..", 
             5900: ".."
-        }
+        };
 
         let riskScore = 0;
 
