@@ -49,22 +49,22 @@ chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
         };
 
         const harmfulPortsInfo = {
-            21: "ssh", 
-            22: "..", 
-            23: "..",
-            25: "..", 
-            69: "..",
-            110: "..",
-            135: "..", 
-            139: "..", 
-            143: "..", 
-            445: "..",
-            1433: "..", 
-            3306: "..", 
-            3389: "..", 
-            5900: ".."
+            21: "FTP (File Transfer Protocol) - Transmits data in plaintext, making it vulnerable to sniffing attacks.",
+            22: "SSH (Secure Shell) - Generally secure if properly configured, but brute-force attacks are common.",
+            23: "Telnet - Insecure and deprecated due to plaintext transmission. Should be disabled in favor of SSH.",
+            25: "SMTP (Simple Mail Transfer Protocol) - Can be used to send spam or relay email if not secured properly.",
+            69: "TFTP (Trivial File Transfer Protocol) - No authentication or encryption. Should be disabled unless absolutely necessary.",
+            110: "POP3 (Post Office Protocol v3) - Retrieves email but lacks encryption unless explicitly configured.",
+            135: "Microsoft RPC - Used in DCOM services; can be exploited in lateral movement or DDoS attacks.",
+            139: "NetBIOS Session Service - Used for Windows file sharing; rarely needed and often exploited.",
+            143: "IMAP - Retrieves emails, often without encryption.",
+            445: "SMB (Server Message Block) - Target of major ransomware attacks (e.g., WannaCry).",
+            1433: "Microsoft SQL Server - Exposes database directly. Should be restricted to internal access or use VPN/tunneling.",
+            3306: "MySQL - Commonly misconfigured and exposed databases are prime targets.",
+            3389: "RDP (Remote Desktop Protocol) - Heavily targeted for unauthorized access and ransomware.",
+            5900: "VNC (Virtual Network Computing) - Unencrypted remote desktop protocol. Should be tunneled through SSH or VPN at minimum."
         };
-
+        
         let riskScore = 0;
 
         // Ports
@@ -82,6 +82,10 @@ chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
 
             if (i < ports.length - 1) {
                 portsHTML += ", ";
+            }
+
+            if (riskScore >= 0 && harmfulPortsInfo[port]) {
+                console.log(`Port ${port} is high-risk: ${harmfulPortsInfo[port]}`);
             }
         }
 
