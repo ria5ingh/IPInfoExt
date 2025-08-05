@@ -21,15 +21,49 @@ chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
 
         // === Updated Risk Scores ===
         const harmfulPorts = {
-            21: 7, 22: 6, 23: 10, 25: 4, 69: 8,
-            110: 4, 135: 6, 139: 6, 143: 3, 445: 10,
-            1433: 9, 3306: 6, 3389: 15, 5900: 12
+            21: 7, 
+            22: 6, 
+            23: 10,
+            25: 4, 
+            69: 8,
+            110: 4,
+            135: 6, 
+            139: 6, 
+            143: 3, 
+            445: 10,
+            1433: 9, 
+            3306: 6, 
+            3389: 15, 
+            5900: 12
         };
 
         const harmfulTags = {
-            malware: 25, botnet: 25, exploit: 20, tor: 15,
-            proxy: 10, vpn: 8, blacklist: 20, anonymous: 8
+            malware: 25,
+            botnet: 25,
+            exploit: 20,
+            tor: 15,
+            proxy: 10,
+            vpn: 8, 
+            blacklist: 20,
+            anonymous: 8
         };
+
+        const harmfulPortsInfo = {
+            21: "ssh", 
+            22: "..", 
+            23: "..",
+            25: "..", 
+            69: "..",
+            110: "..",
+            135: "..", 
+            139: "..", 
+            143: "..", 
+            445: "..",
+            1433: "..", 
+            3306: "..", 
+            3389: "..", 
+            5900: ".."
+        }
 
         let riskScore = 0;
 
