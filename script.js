@@ -70,6 +70,7 @@ chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
         // Ports
         const ports = shodan.ports || [];
         let portsHTML = "";
+        let portsInfo = "\n";
         for (let i = 0; i < ports.length; i++) {
             const port = ports[i];
             const risk = harmfulPorts[port] || 0;
@@ -85,7 +86,7 @@ chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
             }
 
             if (riskScore >= 0 && harmfulPortsInfo[port]) {
-                console.log(`Port ${port} is high-risk: ${harmfulPortsInfo[port]}`);
+                portsInfo += `Port ${port} is high-risk: ${harmfulPortsInfo[port]} \n \n`;
             }
         }
 
@@ -137,6 +138,7 @@ chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
             Coordinates: ${geo.loc || 'N/A'}<br><br>
 
             <strong>Open Ports:</strong> ${portsHTML || "None"}<br>
+            <strong>Port Info:</strong> ${portsInfo || "None"}<br>
             <strong>Tags:</strong> ${tagsHTML || "None"}<br><br>
 
             <strong>Risk Level:</strong> <span style="color:${riskColor};">${riskLevel}</span><br>
