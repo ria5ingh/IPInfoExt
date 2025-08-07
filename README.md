@@ -4,7 +4,7 @@ IP Inspector is a Chrome extension that lets you analyze websites by fetching th
 
 Features:
 * Extracts IP address from the current tab’s domain
-* Displays geographic data (country, city, region, coordinates)
+* Displays geographic data of the server the website is running on (country, city, region, coordinates).
 * Shows open ports and highlights risky ones
 * Lists Shodan tags indicating potential threats
 * Computes a risk score and labels the site as Safe, Low, Medium, High, or Critical
