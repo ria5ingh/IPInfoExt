@@ -5,7 +5,7 @@ IP Inspector is a Chrome extension that lets you analyze websites by fetching th
 Features:
 * Extracts IP address from the current tab’s domain
 * Displays geographic data of the server the website is running on (country, city, region, coordinates).
-* Shows open ports and highlights risky ones
+* Shows open ports and highlights risky ones, provides information for flagged open ports.
 * Lists Shodan tags indicating potential threats
 * Computes a risk score and labels the site as Safe, Low, Medium, High, or Critical
 * Includes a direct link to view the server’s location on Google Maps
@@ -14,13 +14,13 @@ Project Structure:
 
 IP-Inspector/
 
-├── manifest.json         # Chrome extension config
+├── manifest.json (Chrome extension config)
 
-├── index.html            # Popup UI
+├── index.html (Popup UI)
 
-├── style.css             # Popup styling
+├── style.css (Popup styling)
 
-├── script.js             # Core logic and API calls
+├── script.js (Core logic and API calls)
 
 APIs Used:
 * Shodan InternetDB – Retrieves open ports and tags
