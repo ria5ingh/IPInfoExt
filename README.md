@@ -64,3 +64,7 @@ Installation:
 (Disclaimers: This tool is for educational and research purposes only. Always comply with ethical guidelines and never scan or probe systems without permission.)
 
 Built by Lavanya Joshi, Ria Singh, & Anika Atluri
+[https://blog.shodan.io/introducing-the-internetdb-api/
+](url)
+[https://ipinfo.io/products/ip-geolocation-api
+](url)
