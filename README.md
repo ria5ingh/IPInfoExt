@@ -89,7 +89,7 @@ Tags like malware, botnet, tor, and blacklist increase the site's risk score.
 
 ## Built by
 
-Lavanya Joshi, Ria Singh, & Anika Atluri
+Ria Singh, Lavanya Joshi, & Anika Atluri
 
 ---
 
