@@ -6,9 +6,12 @@ chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
         const domain = url.hostname;
 
         //http check
+        let riskScore = 0;
+
         let protocolStatus = "";
         if (url.protocol === "http:") {
             protocolStatus = `<span style="color:red;">HTTP (Insecure) </span>`;
+            riskScore += 6;
         }
         else if (url.protocol === "https:") {
             protocolStatus = `<span style="color:green;">HTTPS</span>`;
@@ -76,7 +79,6 @@ chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
             5900: "VNC (Virtual Network Computing) - Unencrypted remote desktop protocol. Should be tunneled through SSH or VPN at minimum."
         };
         
-        let riskScore = 0;
 
         // Ports
         const ports = shodan.ports || [];
