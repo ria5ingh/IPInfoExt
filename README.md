@@ -1,6 +1,6 @@
-# IP Inspector - Chrome Extension
+# IP Info - Chrome Extension
 
-IP Inspector is a Chrome extension that lets you analyze websites by fetching their IP address, location, open ports, and security-related tags using Shodan InternetDB and GeoNet (ipinfo.io) APIs. It helps assess the risk level of a website based on known vulnerable ports and tags associated with malware, botnets, and more.
+IP Info is a Chrome extension that lets you analyze websites by fetching their IP address, location, open ports, and security-related tags using Shodan InternetDB and GeoNet (ipinfo.io) APIs. It helps assess the risk level of a website based on known vulnerable ports and tags associated with malware, botnets, and more.
 
 ---
 
