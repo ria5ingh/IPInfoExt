@@ -5,6 +5,17 @@ chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
         const url = new URL(tabs[0].url);
         const domain = url.hostname;
 
+        //http check
+        let protocolStatus = "";
+        if (url.protocol === "http:") {
+            protocolStatus = `<span style="color:red;">HTTP (Insecure) </span>`;
+        }
+        else if (url.protocol === "https:") {
+            protocolStatus = `<span style="color:green;">HTTPS</span>`;
+        } else {
+            protocolStatus = `<span style="color:orange;">Unknown Protocol</span>`;
+        }
+
         // Get IP from domain
         const ipResponse = await fetch(`https://dns.google/resolve?name=${domain}&type=A`);
         const ipData = await ipResponse.json();
@@ -86,7 +97,7 @@ chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
             }
 
             if (riskScore >= 0 && harmfulPortsInfo[port]) {
-                portsInfo += `Port ${port} is high-risk: ${harmfulPortsInfo[port]} \n \n`;
+                portsInfo += `Port ${port} is risky: ${harmfulPortsInfo[port]} \n \n`;
             }
         }
 
@@ -130,6 +141,7 @@ chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
         output.innerHTML = `
             <strong>Domain:</strong> ${domain}<br>
             <strong>IP:</strong> ${ip}<br><br>
+            <strong>Protocol:</strong> ${protocolStatus}<br><br>
 
             <strong>Location:</strong><br>
             Country: ${geo.country || 'N/A'}<br>
@@ -152,7 +164,10 @@ chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
             mapLink.style.display = "block";
         }
 
+
     } catch (err) {
         output.innerHTML = `<span style="color:red;">Error: ${err.message}</span>`;
     }
+
+    
 });
